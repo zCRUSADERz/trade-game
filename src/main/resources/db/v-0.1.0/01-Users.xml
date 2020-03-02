@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!--
   ~ The MIT License (MIT)
   ~
@@ -23,10 +23,21 @@
   ~ SOFTWARE.
   -->
 <databaseChangeLog
-  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="
-   http://www.liquibase.org/xml/ns/dbchangelog
-   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
-  <includeAll path="v-0.1.0" relativeToChangelogFile="true" errorIfMissingOrEmpty="true" />
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+    http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.10.xsd">
+    <changeSet id="01-Users" author="Yakovlev Aleksandr">
+        <createTable tableName="users">
+            <column name="username" type="NVARCHAR(50)" />
+            <column name="password" type="NVARCHAR(500)" >
+                <constraints nullable="false" />
+            </column>
+            <column name="enabled" type="BOOLEAN" >
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <addPrimaryKey tableName="users" columnNames="username" constraintName="users_username_pkey" />
+    </changeSet>
 </databaseChangeLog>
