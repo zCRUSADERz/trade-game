@@ -1,0 +1,5 @@
+username,password,enabled
+admin,"{argon2}$argon2i$v=19$m=4096,t=3,p=1$RGdsS3FSRVJ6MURsRkt5Nw$ut+TfM9m6dEmoxJoN7XroQ",true
+user1,"{argon2}$argon2i$v=19$m=4096,t=3,p=1$RGdsS3FSRVJ6MURsRkt5Nw$ut+TfM9m6dEmoxJoN7XroQ",true
+user2,"{argon2}$argon2i$v=19$m=4096,t=3,p=1$RGdsS3FSRVJ6MURsRkt5Nw$ut+TfM9m6dEmoxJoN7XroQ",true
+user3,"{argon2}$argon2i$v=19$m=4096,t=3,p=1$RGdsS3FSRVJ6MURsRkt5Nw$ut+TfM9m6dEmoxJoN7XroQ",true
