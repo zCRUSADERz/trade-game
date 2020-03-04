@@ -30,8 +30,10 @@ import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.core.event.ValidatingRepositoryEventListener;
 import org.springframework.data.rest.core.mapping.RepositoryDetectionStrategy;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
+import org.springframework.http.HttpMethod;
 import org.springframework.validation.Validator;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import ru.yakovlev.entities.Order;
 
 /**
  * Spring Data Rest configuration.
@@ -50,6 +52,11 @@ public class RestConfig implements RepositoryRestConfigurer {
         config.setExposeRepositoryMethodsByDefault(false);
         final var exposureConfiguration = config.getExposureConfiguration();
         exposureConfiguration.disablePutForCreation();
+        exposureConfiguration.forDomainType(Order.class)
+                .withItemExposure((metadata, httpMethods) -> httpMethods.disable(
+                        HttpMethod.PUT, HttpMethod.PATCH, HttpMethod.DELETE)
+                ).withAssociationExposure((metadata, httpMethods) -> httpMethods.disable(
+                        HttpMethod.PUT, HttpMethod.POST, HttpMethod.DELETE));
     }
 
     @Override

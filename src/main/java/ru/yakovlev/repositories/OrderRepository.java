@@ -37,4 +37,7 @@ import ru.yakovlev.entities.Order;
 @RepositoryRestResource
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
+    @RestResource
+    Order save(Order order);
+
 }
