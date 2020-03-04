@@ -34,6 +34,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.validation.Validator;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import ru.yakovlev.entities.Order;
+import ru.yakovlev.entities.validators.BeforeCreateOrderValidator;
 
 /**
  * Spring Data Rest configuration.
@@ -61,6 +62,7 @@ public class RestConfig implements RepositoryRestConfigurer {
 
     @Override
     public void configureValidatingRepositoryEventListener(ValidatingRepositoryEventListener validatingListener) {
+        validatingListener.addValidator("beforeCreate", new BeforeCreateOrderValidator());
         validatingListener.addValidator("beforeCreate", this.validator);
         validatingListener.addValidator("beforeSave", this.validator);
     }

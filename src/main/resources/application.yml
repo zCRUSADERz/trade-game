@@ -44,6 +44,7 @@ spring:
   liquibase:
     change-log: classpath:/db/liquibase-changelog.xml
   messages:
+    basename: i18n/order
     fallback-to-system-locale: false
   web:
     locale: en
