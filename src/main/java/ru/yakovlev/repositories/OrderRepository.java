@@ -25,6 +25,7 @@
 package ru.yakovlev.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import ru.yakovlev.entities.Order;
 
 /**
@@ -33,6 +34,7 @@ import ru.yakovlev.entities.Order;
  * @author Yakovlev Aleander (sanyakovlev@yandex.ru)
  * @since 0.3.0
  */
+@RepositoryRestResource
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
 }
