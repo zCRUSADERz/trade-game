@@ -24,13 +24,20 @@
 
 package ru.yakovlev.service.security;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Objects;
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.val;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.acls.domain.BasePermission;
 import org.springframework.security.acls.domain.CumulativePermission;
 import org.springframework.security.acls.domain.GrantedAuthoritySid;
 import org.springframework.security.acls.domain.ObjectIdentityImpl;
 import org.springframework.security.acls.model.MutableAclService;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -42,7 +49,25 @@ import org.springframework.stereotype.Service;
 @Service
 @AllArgsConstructor
 public class SecurityService {
+    private final RoleHierarchy roleHierarchy;
     private final MutableAclService aclService;
+
+    /**
+     * Return all user authorities, given the role hierarchy.
+     *
+     * @return all user authorities, given the role hierarchy.
+     */
+    public Collection<String> userAuthorities() {
+        final Collection<String> result;
+        val authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (Objects.isNull(authentication)) {
+            result = Collections.emptyList();
+        } else {
+            val authorities = this.roleHierarchy.getReachableGrantedAuthorities(authentication.getAuthorities());
+            result = authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
+        }
+        return result;
+    }
 
     /**
      * Create access control list for given entity.
