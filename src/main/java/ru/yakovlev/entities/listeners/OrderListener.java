@@ -22,26 +22,47 @@
  * SOFTWARE.
  */
 
-package ru.yakovlev;
+package ru.yakovlev.entities.listeners;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.EnableLoadTimeWeaving;
-import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
+import java.util.Objects;
+import javax.persistence.PostPersist;
+import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+import ru.yakovlev.entities.Order;
+import ru.yakovlev.service.security.SecurityService;
 
 /**
- * Application entry point.
+ * Order event listener.
  *
  * @author Yakovlev Aleander (sanyakovlev@yandex.ru)
- * @since 0.1.0
+ * @since 0.3.0
  */
-@SpringBootApplication
-@EnableSpringConfigured
-@EnableLoadTimeWeaving
-public class Application {
+@NoArgsConstructor
+public class OrderListener {
+    private Listener listener;
 
-    public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+    @PostPersist
+    public void afterPersist(final Order order) {
+        this.init();
+        this.listener.afterPersist(order);
     }
 
+    private void init() {
+        if (Objects.isNull(this.listener)) {
+            this.listener = new Listener();
+        }
+    }
+
+    @Configurable
+    public static class Listener {
+
+        @Autowired
+        private SecurityService securityService;
+
+        public void afterPersist(Order order) {
+            this.securityService.createAcl(order);
+        }
+
+    }
 }
