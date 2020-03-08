@@ -43,7 +43,7 @@ import ru.yakovlev.entities.Order;
  * @since 0.3.0
  */
 @RepositoryRestResource
-public interface OrderRepository extends JpaRepository<Order, Long> {
+public interface OrderRepository extends JpaRepository<Order, Long>, CustomOrderRepository {
     String FIND_ALL_QUERY = "SELECT o FROM Order AS o WHERE EXISTS (" +
             "    SELECT 1 FROM AclSid As s " +
             "       JOIN AclEntry AS e ON e.securityId = s " +
