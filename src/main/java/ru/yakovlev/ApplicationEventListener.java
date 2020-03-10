@@ -24,28 +24,26 @@
 
 package ru.yakovlev;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
-import org.springframework.context.annotation.EnableLoadTimeWeaving;
-import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
+import lombok.AllArgsConstructor;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
+import ru.yakovlev.service.OrdersForExecution;
 
 /**
- * Application entry point.
+ * Application event listener.
  *
  * @author Yakovlev Aleander (sanyakovlev@yandex.ru)
- * @since 0.1.0
+ * @since 0.5.0
  */
-@SpringBootApplication
-@EnableSpringConfigured
-@EnableLoadTimeWeaving
-@EnableTransactionManagement
-@ConfigurationPropertiesScan
-public class Application {
+@AllArgsConstructor
+public class ApplicationEventListener {
+    private final OrdersForExecution ordersForExecution;
+    private final int workers;
 
-    public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+    @EventListener
+    public void handleContextStart(ContextRefreshedEvent event) {
+        for (int i = 0; i < this.workers; i++) {
+            this.ordersForExecution.startExecutionWorker();
+        }
     }
-
 }
