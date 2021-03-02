@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!--
   ~ The MIT License (MIT)
   ~
@@ -23,11 +23,26 @@
   ~ SOFTWARE.
   -->
 <databaseChangeLog
-  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="
-   http://www.liquibase.org/xml/ns/dbchangelog
-   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
-  <includeAll path="v-0.1.0" relativeToChangelogFile="true" errorIfMissingOrEmpty="true" />
-  <includeAll path="v-0.2.0" relativeToChangelogFile="true" errorIfMissingOrEmpty="true" />
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+    http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.10.xsd">
+    <changeSet id="02-AclClass" author="Yakovlev Aleksandr">
+        <createSequence sequenceName="acl_class_id_seq"
+                        minValue="1" startValue="1" incrementBy="1" dataType="BIGINT" />
+        <createTable tableName="acl_class">
+            <column name="id" type="BIGINT" defaultValueSequenceNext="acl_class_id_seq" />
+            <column name="class_id_type" type="VARCHAR(100)" >
+                <constraints nullable="false" />
+            </column>
+            <column name="class" type="VARCHAR(100)" >
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <addPrimaryKey tableName="acl_class" columnNames="id" constraintName="acl_class_id_pkey" />
+        <createIndex tableName="acl_class" indexName="acl_class_class_key" unique="true">
+            <column name="class" />
+        </createIndex>
+    </changeSet>
 </databaseChangeLog>
