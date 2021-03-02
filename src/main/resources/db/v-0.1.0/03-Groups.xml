@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!--
   ~ The MIT License (MIT)
   ~
@@ -23,10 +23,19 @@
   ~ SOFTWARE.
   -->
 <databaseChangeLog
-  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="
-   http://www.liquibase.org/xml/ns/dbchangelog
-   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
-  <includeAll path="v-0.1.0" relativeToChangelogFile="true" errorIfMissingOrEmpty="true" />
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+    http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.10.xsd">
+    <changeSet id="03-Groups" author="Yakovlev Aleksandr">
+        <createSequence sequenceName="groups_id_seq" minValue="1" startValue="1" incrementBy="1" dataType="BIGINT" />
+        <createTable tableName="groups">
+            <column name="id" type="BIGINT" defaultValueSequenceNext="groups_id_seq" />
+            <column name="group_name" type="NVARCHAR(50)" >
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <addPrimaryKey tableName="groups" columnNames="id" constraintName="groups_id_pkey" />
+    </changeSet>
 </databaseChangeLog>
