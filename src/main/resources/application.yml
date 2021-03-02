@@ -41,6 +41,8 @@ spring:
     open-in-view: false
     hibernate:
       ddl-auto: none
+  liquibase:
+    change-log: classpath:/db/liquibase-changelog.xml
   messages:
     fallback-to-system-locale: false
   web:
