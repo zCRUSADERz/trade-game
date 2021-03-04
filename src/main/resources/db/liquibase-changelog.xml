@@ -30,4 +30,5 @@
    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
   <includeAll path="v-0.1.0" relativeToChangelogFile="true" errorIfMissingOrEmpty="true" />
   <includeAll path="v-0.2.0" relativeToChangelogFile="true" errorIfMissingOrEmpty="true" />
+  <includeAll path="v-0.3.0" relativeToChangelogFile="true" errorIfMissingOrEmpty="true" />
 </databaseChangeLog>
