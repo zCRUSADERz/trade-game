@@ -29,6 +29,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
@@ -47,6 +48,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import ru.yakovlev.entities.embedded.OrderType;
+import ru.yakovlev.entities.listeners.OrderListener;
 
 /**
  * Order entity.
@@ -56,6 +58,7 @@ import ru.yakovlev.entities.embedded.OrderType;
  */
 @Entity
 @Table(name = "\"order\"")
+@EntityListeners(OrderListener.class)
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
