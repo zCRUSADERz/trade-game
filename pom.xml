@@ -33,7 +33,7 @@
     </parent>
     <groupId>ru.yakovlev</groupId>
     <artifactId>trade-game</artifactId>
-    <version>0.3.0</version>
+    <version>0.4.0-SNAPSHOT</version>
     <properties>
         <java.version>11</java.version>
     </properties>
@@ -41,7 +41,7 @@
         <connection>scm:git:https://github.com/zCRUSADERz/trade-game</connection>
         <url>scm:git:https://github.com/zCRUSADERz/trade-game</url>
         <developerConnection>scm:git:https://github.com/zCRUSADERz/trade-game</developerConnection>
-        <tag>trade-game-0.3.0</tag>
+        <tag>HEAD</tag>
     </scm>
     <dependencies>
         <dependency>
