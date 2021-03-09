@@ -26,10 +26,15 @@ package ru.yakovlev.entities.listeners;
 
 import java.util.Objects;
 import javax.persistence.PostPersist;
+import javax.persistence.PostUpdate;
 import lombok.NoArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import ru.yakovlev.entities.Order;
+import ru.yakovlev.service.OrdersForExecution;
 import ru.yakovlev.service.security.SecurityService;
 
 /**
@@ -48,6 +53,12 @@ public class OrderListener {
         this.listener.afterPersist(order);
     }
 
+    @PostUpdate
+    public void afterUpdate(final Order order) {
+        this.init();
+        this.listener.afterUpdate(order);
+    }
+
     private void init() {
         if (Objects.isNull(this.listener)) {
             this.listener = new Listener();
@@ -56,12 +67,28 @@ public class OrderListener {
 
     @Configurable
     public static class Listener {
-
+        @Autowired
+        private OrdersForExecution ordersForExecution;
         @Autowired
         private SecurityService securityService;
 
         public void afterPersist(Order order) {
             this.securityService.createAcl(order);
+            this.notifyOrdersForExecution(order);
+        }
+
+        public void afterUpdate(Order order) {
+            this.notifyOrdersForExecution(order);
+        }
+
+        private void notifyOrdersForExecution(Order order) {
+            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+                @SneakyThrows
+                @Override
+                public void afterCommit() {
+                    ordersForExecution.notify(order);
+                }
+            });
         }
 
     }

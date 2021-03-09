@@ -45,4 +45,17 @@ public class OrdersForExecution {
         }
     }
 
+    /**
+     * Notify about a change in the order, it may be possible to send it for execution.
+     *
+     * @param order changed order.
+     * @throws InterruptedException if thread is interrupted.
+     */
+    public void notify(final Order order) throws InterruptedException {
+        if (!(order.isCancelled() || order.isFullyExecuted() || order.isOnExecution())) {
+            log.trace("{} order added to the queue for execution", order.getId());
+            this.queue.put(order);
+        }
+    }
+
 }
