@@ -28,6 +28,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.EnableLoadTimeWeaving;
 import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * Application entry point.
@@ -38,6 +39,7 @@ import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
 @SpringBootApplication
 @EnableSpringConfigured
 @EnableLoadTimeWeaving
+@EnableTransactionManagement
 public class Application {
 
     public static void main(String[] args) {

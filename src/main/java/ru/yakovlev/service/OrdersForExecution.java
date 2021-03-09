@@ -1,0 +1,48 @@
+package ru.yakovlev.service;
+
+import java.util.concurrent.BlockingQueue;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.transaction.support.TransactionTemplate;
+import ru.yakovlev.entities.Order;
+import ru.yakovlev.repositories.OrderExecutionRepository;
+import ru.yakovlev.repositories.OrderRepository;
+
+/**
+ * Many orders that can be sent for execution.
+ *
+ * @author Yakovlev Aleander (sanyakovlev@yandex.ru)
+ * @since 0.5.0
+ */
+@AllArgsConstructor
+@Slf4j
+public class OrdersForExecution {
+    private final BlockingQueue<Order> queue;
+    private final TransactionTemplate transactionTemplate;
+    private final OrderRepository orderRepository;
+    private final OrderExecutionRepository orderExecutionRepository;
+
+    /**
+     * Starts a new thread for order execution.
+     */
+    @Async("simpleAsyncTaskExecutor")
+    public void startExecutionWorker() {
+        log.info("{} worker started to execute orders", Thread.currentThread().getName());
+        while (!Thread.interrupted()) {
+            Order order = null;
+            try {
+                order = this.queue.take();
+                final var finalOrder = order;
+                this.transactionTemplate.executeWithoutResult(status ->
+                        new OrderForExecution(finalOrder, this.orderRepository, this.orderExecutionRepository)
+                                .sendForExecution());
+            } catch (InterruptedException ex) {
+                Thread.currentThread().interrupt();
+            } catch (Exception ex) {
+                log.error("Exception on sending order {} for execution", order, ex);
+            }
+        }
+    }
+
+}
