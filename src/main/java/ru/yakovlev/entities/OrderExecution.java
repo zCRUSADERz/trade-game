@@ -25,6 +25,7 @@
 package ru.yakovlev.entities;
 
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -36,6 +37,7 @@ import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import ru.yakovlev.entities.listeners.OrderExecutionListener;
 
 /**
  * Order execution entity.
@@ -44,6 +46,7 @@ import lombok.NoArgsConstructor;
  * @since 0.3.0
  */
 @Entity
+@EntityListeners(OrderExecutionListener.class)
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
