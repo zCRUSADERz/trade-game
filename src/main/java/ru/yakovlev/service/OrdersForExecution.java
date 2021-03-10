@@ -3,6 +3,7 @@ package ru.yakovlev.service;
 import java.util.concurrent.BlockingQueue;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.transaction.support.TransactionTemplate;
 import ru.yakovlev.entities.Order;
@@ -56,6 +57,20 @@ public class OrdersForExecution {
             log.trace("{} order added to the queue for execution", order.getId());
             this.queue.put(order);
         }
+    }
+
+    /**
+     * Defines orders ready for execution and sends them for execution to order execution workers.
+     *
+     * @param limit orders limit.
+     * @return number of orders sent for execution.
+     */
+    public int sendToExecution(int limit) {
+        val activeOrdersForExecution = this.orderRepository.findOrdersForExecution(limit);
+        val result = activeOrdersForExecution.size();
+        this.queue.addAll(activeOrdersForExecution);
+        log.debug("{} orders were added to the queue for subsequent execution", result);
+        return result;
     }
 
 }
