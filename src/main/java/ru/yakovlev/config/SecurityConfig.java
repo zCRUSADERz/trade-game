@@ -62,6 +62,7 @@ public class SecurityConfig {
         http.authorizeRequests().mvcMatchers("/error").permitAll();
         http.authorizeRequests().antMatchers("/profile/**").permitAll();
         http.authorizeRequests().antMatchers("/orders/sendToExecution").hasRole("ADMIN");
+        http.authorizeRequests().antMatchers("/orders/addWorkersForOrderExecution").hasRole("ADMIN");
         http.authorizeRequests().anyRequest().authenticated().and().httpBasic();
         http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
         return http.build();

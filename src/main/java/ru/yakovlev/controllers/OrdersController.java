@@ -50,4 +50,13 @@ public class OrdersController {
         return ResponseEntity.ok(sentOrders);
     }
 
+    @PostMapping("/orders/addWorkersForOrderExecution")
+    public ResponseEntity<Object> addWorkersForOrderExecution(
+            @RequestParam(defaultValue = "1") int workers) {
+        for (int i = 0; i< workers; i++) {
+            this.ordersForExecution.startExecutionWorker();
+        }
+        return ResponseEntity.noContent().build();
+    }
+
 }
