@@ -22,30 +22,32 @@
  * SOFTWARE.
  */
 
-package ru.yakovlev;
+package ru.yakovlev.config;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
-import org.springframework.context.annotation.EnableLoadTimeWeaving;
-import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
+import java.util.Objects;
+import lombok.AllArgsConstructor;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.ConstructorBinding;
 
 /**
- * Application entry point.
+ * Order execution properties.
  *
  * @author Yakovlev Aleander (sanyakovlev@yandex.ru)
- * @since 0.1.0
+ * @since 0.5.0
  */
-@SpringBootApplication
-@EnableSpringConfigured
-@EnableLoadTimeWeaving
-@EnableTransactionManagement
-@ConfigurationPropertiesScan
-public class Application {
+@ConfigurationProperties("ru.yakovlev.order.execution")
+@ConstructorBinding
+@AllArgsConstructor
+public class OrderExecutionProperties {
+    private final Integer workers;
 
-    public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+    public Integer getWorkers() {
+        final int result;
+        if (Objects.isNull(this.workers)) {
+            result = Runtime.getRuntime().availableProcessors();
+        } else {
+            result = this.workers;
+        }
+        return result;
     }
-
 }
