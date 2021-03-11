@@ -37,6 +37,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.security.access.prepost.PostAuthorize;
 import ru.yakovlev.entities.Order;
+import ru.yakovlev.model.PriceLevelInfo;
 
 /**
  * Order entity repository.
@@ -83,5 +84,13 @@ public interface OrderRepository extends JpaRepository<Order, Long>, CustomOrder
     @Query("SELECT o FROM Order AS o " +
             "WHERE o.onExecution = false AND o.cancelled = false AND o.fullyExecuted = false AND o.id = :id")
     Optional<Order> findByIdForExecutionWithLock(Long id);
+
+    @Query("SELECT new ru.yakovlev.model.PriceLevelInfo(" +
+            "   o.price, o.type, COUNT(o.id), SUM(o.quantityLeftover)) " +
+            "FROM Order AS o " +
+            "WHERE o.fullyExecuted = false AND o.cancelled = false " +
+            "GROUP BY o.price, o.type " +
+            "ORDER BY o.price, o.type")
+    List<PriceLevelInfo> depthOfMarket();
 
 }
