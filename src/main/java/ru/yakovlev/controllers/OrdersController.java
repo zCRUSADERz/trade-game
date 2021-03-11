@@ -28,6 +28,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.yakovlev.service.OrdersForExecution;
 import ru.yakovlev.service.OrdersService;
@@ -56,6 +57,13 @@ public class OrdersController {
         for (int i = 0; i< workers; i++) {
             this.ordersForExecution.startExecutionWorker();
         }
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/orders/createOrders")
+    public ResponseEntity<Object> createOrders(@RequestBody OrdersService.CreateOrdersParams params)
+            throws InterruptedException {
+        this.ordersService.createOrders(params);
         return ResponseEntity.noContent().build();
     }
 
