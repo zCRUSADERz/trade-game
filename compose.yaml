@@ -1,0 +1,14 @@
+services:
+  db:
+    image: postgres
+    environment:
+      POSTGRES_DB: trade-game
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+  app:
+    image: spring
+    ports:
+      - "80:8080"
+    command: --spring.datasource.url=jdbc:postgresql://db/trade-game
+    depends_on:
+      - "db"
