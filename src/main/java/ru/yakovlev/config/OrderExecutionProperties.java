@@ -41,6 +41,11 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 public class OrderExecutionProperties {
     private final Integer workers;
 
+    /**
+     * Returns the number of threads for order execution.
+     *
+     * @return number of threads for order execution.
+     */
     public Integer getWorkers() {
         final int result;
         if (Objects.isNull(this.workers)) {

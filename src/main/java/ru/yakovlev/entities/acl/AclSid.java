@@ -56,7 +56,7 @@ public class AclSid {
     @Column(nullable = false, updatable = false)
     private boolean principal;
 
-    @Column(name= "sid", unique = true, nullable = false, updatable = false, length = 100)
+    @Column(name = "sid", unique = true, nullable = false, updatable = false, length = 100)
     @NotBlank
     @Size(min = 1, max = 100)
     private String securityId;

@@ -115,10 +115,17 @@ public class OrdersService {
         }
     }
 
+    /**
+     * Create orders parameters.
+     *
+     * @author Yakovlev Aleander (sanyakovlev@yandex.ru)
+     * @since 0.4.0
+     */
     @Value
     @Jacksonized
     @Builder
     public static class CreateOrdersParams {
+
         /**
          * Randomly selects the type of order.
          */
@@ -131,7 +138,7 @@ public class OrdersService {
         int numberOfBatches;
 
         /**
-         * Number of orders in a batch
+         * Number of orders in a batch.
          */
         int batchSize;
 

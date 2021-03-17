@@ -40,6 +40,11 @@ public class ApplicationEventListener {
     private final OrdersForExecution ordersForExecution;
     private final int workers;
 
+    /**
+     * Launches threads for order execution.
+     *
+     * @param event context refreshed event.
+     */
     @EventListener
     public void handleContextStart(ContextRefreshedEvent event) {
         for (int i = 0; i < this.workers; i++) {

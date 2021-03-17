@@ -27,6 +27,11 @@ import ru.yakovlev.repositories.OrderRepository;
 public class DepthOfMarketController {
     private final OrderRepository orderRepository;
 
+    /**
+     * Returns a representation of the resource.
+     *
+     * @return a representation of the resource.
+     */
     @GetMapping("/depthOfMarket")
     public ResponseEntity<RepresentationModel<CollectionModel<PriceLevelInfo>>> depthOfMarket() {
         val builder = HalModelBuilder.halModelOf(new DepthOfMarket(this.orderRepository.depthOfMarket()));

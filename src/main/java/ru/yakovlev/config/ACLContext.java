@@ -61,13 +61,13 @@ public class ACLContext {
     private final DataSource dataSource;
 
     @Bean
-    public EhCacheBasedAclCache aclCache() {
+    EhCacheBasedAclCache aclCache() {
         return new EhCacheBasedAclCache(
                 aclEhCacheFactoryBean().getObject(), permissionGrantingStrategy(), aclAuthorizationStrategy());
     }
 
     @Bean
-    public EhCacheFactoryBean aclEhCacheFactoryBean() {
+    EhCacheFactoryBean aclEhCacheFactoryBean() {
         EhCacheFactoryBean ehCacheFactoryBean = new EhCacheFactoryBean();
         ehCacheFactoryBean.setCacheManager(Objects.requireNonNull(aclCacheManager().getObject()));
         ehCacheFactoryBean.setCacheName("aclCache");
@@ -75,22 +75,22 @@ public class ACLContext {
     }
 
     @Bean
-    public EhCacheManagerFactoryBean aclCacheManager() {
+    EhCacheManagerFactoryBean aclCacheManager() {
         return new EhCacheManagerFactoryBean();
     }
 
     @Bean
-    public PermissionGrantingStrategy permissionGrantingStrategy() {
+    PermissionGrantingStrategy permissionGrantingStrategy() {
         return new CustomPermissionGrantingStrategy(new ConsoleAuditLogger());
     }
 
     @Bean
-    public AclAuthorizationStrategy aclAuthorizationStrategy() {
+    AclAuthorizationStrategy aclAuthorizationStrategy() {
         return new AclAuthorizationStrategyImpl(new SimpleGrantedAuthority("ROLE_ADMIN"));
     }
 
     @Bean
-    public MethodSecurityExpressionHandler defaultMethodSecurityExpressionHandler() {
+    MethodSecurityExpressionHandler defaultMethodSecurityExpressionHandler() {
         DefaultMethodSecurityExpressionHandler expressionHandler = new DefaultMethodSecurityExpressionHandler();
         AclPermissionEvaluator permissionEvaluator = new AclPermissionEvaluator(aclService());
         expressionHandler.setPermissionEvaluator(permissionEvaluator);
@@ -99,7 +99,7 @@ public class ACLContext {
     }
 
     @Bean
-    public LookupStrategy lookupStrategy() {
+    LookupStrategy lookupStrategy() {
         val lookupStrategy = new BasicLookupStrategy(
                 this.dataSource, aclCache(), aclAuthorizationStrategy(), new ConsoleAuditLogger());
         lookupStrategy.setAclClassIdSupported(true);
@@ -107,7 +107,7 @@ public class ACLContext {
     }
 
     @Bean
-    public JdbcMutableAclService aclService() {
+    JdbcMutableAclService aclService() {
         val aclService = new JdbcMutableAclService(this.dataSource, lookupStrategy(), aclCache());
         aclService.setAclClassIdSupported(true);
         aclService.setClassIdentityQuery("select currval('acl_class_id_seq')");

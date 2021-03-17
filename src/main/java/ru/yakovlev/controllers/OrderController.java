@@ -44,6 +44,12 @@ import ru.yakovlev.service.OrdersService;
 public class OrderController {
     private final OrdersService ordersService;
 
+    /**
+     * Cancels further execution of the order if it has not been executed yet.
+     *
+     * @param id order id.
+     * @return "No Content" http status.
+     */
     @PostMapping("/orders/{id}/cancel")
     public ResponseEntity<Object> cancel(@PathVariable Long id) {
         try {
@@ -51,6 +57,6 @@ public class OrderController {
         } catch (EntityNotFoundException ex) {
             throw new ResourceNotFoundException();
         }
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 }

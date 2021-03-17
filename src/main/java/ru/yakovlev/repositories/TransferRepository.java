@@ -42,8 +42,8 @@ public interface TransferRepository extends JpaRepository<Transfer, Long> {
      * @param orderId order id.
      * @return executed volume of the given order.
      */
-    @Query("SELECT COALESCE(SUM(t.quantity), 0) FROM Transfer AS t " +
-            "JOIN OrderExecution AS e ON t.orderExecution.id = e.id " +
-            "WHERE e.fromOrder.id = :orderId OR e.toOrder.id = :orderId")
+    @Query("SELECT COALESCE(SUM(t.quantity), 0) FROM Transfer AS t "
+            + "JOIN OrderExecution AS e ON t.orderExecution.id = e.id "
+            + "WHERE e.fromOrder.id = :orderId OR e.toOrder.id = :orderId")
     Long sumQuantityOfAllTransfersForOrder(Long orderId);
 }

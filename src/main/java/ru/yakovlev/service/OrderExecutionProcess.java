@@ -8,7 +8,6 @@ import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.support.TransactionTemplate;
-import ru.yakovlev.entities.Order;
 import ru.yakovlev.entities.OrderExecution;
 import ru.yakovlev.entities.Transfer;
 import ru.yakovlev.repositories.OrderExecutionRepository;
@@ -28,6 +27,11 @@ public class OrderExecutionProcess {
     private final TransferRepository transferRepository;
     private final TransactionTemplate transactionTemplate;
 
+    /**
+     * The execution process starts.
+     *
+     * @param orderExecution order execution.
+     */
     @Async
     public void execute(final OrderExecution orderExecution) {
         var count = 3;
@@ -37,12 +41,10 @@ public class OrderExecutionProcess {
                     val optExecution = this.orderExecutionRepository.findById(orderExecution.getId());
                     if (optExecution.isPresent()) {
                         val execution = optExecution.get();
-                        val fromOrder = execution.getFromOrder();
-                        val toOrder = execution.getToOrder();
-                        if (fromOrder.isCancelled() || toOrder.isCancelled()) {
+                        if (execution.getFromOrder().isCancelled() || execution.getToOrder().isCancelled()) {
                             this.cancelExecution(execution);
                         } else {
-                            this.execute(fromOrder, toOrder, execution);
+                            this.prepare(execution);
                         }
 
                     }
@@ -60,7 +62,9 @@ public class OrderExecutionProcess {
         this.transferRepository.save(new Transfer(execution, 0));
     }
 
-    private void execute(final Order fromOrder, final Order toOrder, final OrderExecution execution) {
+    private void prepare(final OrderExecution execution) {
+        val fromOrder = execution.getFromOrder();
+        val toOrder = execution.getToOrder();
         val fromSum = this.transferRepository.sumQuantityOfAllTransfersForOrder(fromOrder.getId());
         val fromLeftover = fromOrder.getQuantity() - fromSum;
         val toSum = this.transferRepository.sumQuantityOfAllTransfersForOrder(toOrder.getId());

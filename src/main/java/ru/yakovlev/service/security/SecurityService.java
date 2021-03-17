@@ -75,15 +75,15 @@ public class SecurityService {
      * @param entity entity.
      */
     public void createAcl(Object entity) {
-        val identity = new ObjectIdentityImpl(entity);
-        val acl = this.aclService.createAcl(identity);
-        val ownerSid = acl.getOwner();
         val ownerPermission = new CumulativePermission();
         ownerPermission.set(BasePermission.READ);
         ownerPermission.set(BasePermission.WRITE);
         ownerPermission.set(BasePermission.CREATE);
         ownerPermission.set(BasePermission.DELETE);
         ownerPermission.set(BasePermission.ADMINISTRATION);
+        val identity = new ObjectIdentityImpl(entity);
+        val acl = this.aclService.createAcl(identity);
+        val ownerSid = acl.getOwner();
         acl.insertAce(acl.getEntries().size(), ownerPermission, ownerSid, true);
         acl.insertAce(acl.getEntries().size(), BasePermission.READ, new GrantedAuthoritySid("ROLE_SUPERVISOR"), true);
         this.aclService.updateAcl(acl);

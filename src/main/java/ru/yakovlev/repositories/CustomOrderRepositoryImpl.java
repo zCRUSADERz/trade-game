@@ -28,17 +28,17 @@ public class CustomOrderRepositoryImpl implements CustomOrderRepository {
     @Override
     public List<Order> findOrdersForExecution(final int limit) {
         return this.entityManager.createQuery(
-                "SELECT o FROM Order AS o " +
-                        "WHERE o.onExecution = false AND o.cancelled = false AND o.fullyExecuted = false " +
-                        "   AND ((o.type = 'BUY' AND o.price >= (" +
-                        "           SELECT min(o.price) FROM Order AS o " +
-                        "           WHERE o.type = 'SELL' AND o.onExecution = false AND o.cancelled = false " +
-                        "               AND o.fullyExecuted = false)) " +
-                        "       OR (o.type = 'SELL' AND o.price <= (" +
-                        "           SELECT max(o.price) FROM Order AS o " +
-                        "           WHERE o.type = 'BUY' AND o.onExecution = false AND o.cancelled = false " +
-                        "               AND o.fullyExecuted = false)))"
-                , Order.class
+                "SELECT o FROM Order AS o "
+                        + "WHERE o.onExecution = false AND o.cancelled = false AND o.fullyExecuted = false "
+                        + "   AND ((o.type = 'BUY' AND o.price >= ("
+                        + "           SELECT min(o.price) FROM Order AS o "
+                        + "           WHERE o.type = 'SELL' AND o.onExecution = false AND o.cancelled = false "
+                        + "               AND o.fullyExecuted = false)) "
+                        + "       OR (o.type = 'SELL' AND o.price <= ("
+                        + "           SELECT max(o.price) FROM Order AS o "
+                        + "           WHERE o.type = 'BUY' AND o.onExecution = false AND o.cancelled = false "
+                        + "               AND o.fullyExecuted = false)))",
+                Order.class
         ).setMaxResults(limit).getResultList();
     }
 
@@ -65,7 +65,8 @@ public class CustomOrderRepositoryImpl implements CustomOrderRepository {
                 default:
                     throw new IllegalStateException("Unknown order type " + order.getType());
             }
-            query.where(onExecutionPredicate, cancelledPredicate, fullyExecutedPredicate, typePredicate, pricePredicate);
+            query.where(
+                    onExecutionPredicate, cancelledPredicate, fullyExecutedPredicate, typePredicate, pricePredicate);
             final var byId = builder.asc(root.get("id"));
             if (Objects.nonNull(sort)) {
                 final var listOfOrders = QueryUtils.toOrders(sort, root, builder);

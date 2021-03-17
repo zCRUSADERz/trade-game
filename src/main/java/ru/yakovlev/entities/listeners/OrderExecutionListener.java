@@ -33,11 +33,22 @@ public class OrderExecutionListener {
         }
     }
 
+    /**
+     * Order execution event listener.
+     *
+     * @author Yakovlev Aleander (sanyakovlev@yandex.ru)
+     * @since 0.6.0
+     */
     @Configurable
     public static class Listener {
         @Autowired
         private OrderExecutionProcess orderExecutionProcess;
 
+        /**
+         * Handle after persist event. Starts the execution process.
+         *
+         * @param orderExecution order execution.
+         */
         public void afterPersist(OrderExecution orderExecution) {
             TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
                 @SneakyThrows

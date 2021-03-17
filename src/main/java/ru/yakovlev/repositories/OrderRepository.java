@@ -47,17 +47,17 @@ import ru.yakovlev.model.PriceLevelInfo;
  */
 @RepositoryRestResource
 public interface OrderRepository extends JpaRepository<Order, Long>, CustomOrderRepository {
-    String FIND_ALL_QUERY = "SELECT o FROM Order AS o WHERE EXISTS (" +
-            "    SELECT 1 FROM AclSid As s " +
-            "       JOIN AclEntry AS e ON e.securityId = s " +
-            "       JOIN AclObjectIdentity AS i_parent ON i_parent = e.acl " +
-            "       JOIN AclObjectIdentity AS i ON i = i_parent.parent OR i = i_parent " +
-            "       JOIN AclClass AS c ON i.objectClass = c " +
-            "    WHERE (s.principal = true AND s.securityId = :#{principal.username} " +
-            "           OR s.principal = false AND s.securityId IN :#{@securityService.userAuthorities()}) " +
-            "       AND (MOD(e.mask, 2) = 1 AND e.granting = true OR MOD(e.mask, 2) = 0 AND e.granting = false) " +
-            "       AND c.clazz = 'ru.yakovlev.entities.Order' " +
-            "       AND i.objectIdIdentity = CONCAT('', o.id))";
+    String FIND_ALL_QUERY = "SELECT o FROM Order AS o WHERE EXISTS ("
+            + "    SELECT 1 FROM AclSid As s "
+            + "       JOIN AclEntry AS e ON e.securityId = s "
+            + "       JOIN AclObjectIdentity AS i_parent ON i_parent = e.acl "
+            + "       JOIN AclObjectIdentity AS i ON i = i_parent.parent OR i = i_parent "
+            + "       JOIN AclClass AS c ON i.objectClass = c "
+            + "    WHERE (s.principal = true AND s.securityId = :#{principal.username} "
+            + "           OR s.principal = false AND s.securityId IN :#{@securityService.userAuthorities()}) "
+            + "       AND (MOD(e.mask, 2) = 1 AND e.granting = true OR MOD(e.mask, 2) = 0 AND e.granting = false) "
+            + "       AND c.clazz = 'ru.yakovlev.entities.Order' "
+            + "       AND i.objectIdIdentity = CONCAT('', o.id))";
 
     @Override
     @Query(FIND_ALL_QUERY)
@@ -81,16 +81,16 @@ public interface OrderRepository extends JpaRepository<Order, Long>, CustomOrder
     Order save(Order order);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Query("SELECT o FROM Order AS o " +
-            "WHERE o.onExecution = false AND o.cancelled = false AND o.fullyExecuted = false AND o.id = :id")
+    @Query("SELECT o FROM Order AS o "
+            + "WHERE o.onExecution = false AND o.cancelled = false AND o.fullyExecuted = false AND o.id = :id")
     Optional<Order> findByIdForExecutionWithLock(Long id);
 
-    @Query("SELECT new ru.yakovlev.model.PriceLevelInfo(" +
-            "   o.price, o.type, COUNT(o.id), SUM(o.quantityLeftover)) " +
-            "FROM Order AS o " +
-            "WHERE o.fullyExecuted = false AND o.cancelled = false " +
-            "GROUP BY o.price, o.type " +
-            "ORDER BY o.price, o.type")
+    @Query("SELECT new ru.yakovlev.model.PriceLevelInfo("
+            + "   o.price, o.type, COUNT(o.id), SUM(o.quantityLeftover)) "
+            + "FROM Order AS o "
+            + "WHERE o.fullyExecuted = false AND o.cancelled = false "
+            + "GROUP BY o.price, o.type "
+            + "ORDER BY o.price, o.type")
     List<PriceLevelInfo> depthOfMarket();
 
 }

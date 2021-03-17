@@ -45,21 +45,39 @@ public class OrdersController {
     private final OrdersForExecution ordersForExecution;
     private final OrdersService ordersService;
 
+    /**
+     * Sends orders for execution that can be executed.
+     *
+     * @param limit order limit.
+     * @return number of orders sent.
+     */
     @PostMapping("/orders/sendToExecution")
     public ResponseEntity<Object> sendToExecution(@RequestParam(defaultValue = "100") int limit) {
         final var sentOrders = this.ordersForExecution.sendToExecution(limit);
         return ResponseEntity.ok(sentOrders);
     }
 
+    /**
+     * Launches threads that execute orders.
+     *
+     * @param workers number of threads to runю
+     * @return "No Content" http status.
+     */
     @PostMapping("/orders/addWorkersForOrderExecution")
-    public ResponseEntity<Object> addWorkersForOrderExecution(
-            @RequestParam(defaultValue = "1") int workers) {
-        for (int i = 0; i< workers; i++) {
+    public ResponseEntity<Object> addWorkersForOrderExecution(@RequestParam(defaultValue = "1") int workers) {
+        for (int i = 0; i < workers; i++) {
             this.ordersForExecution.startExecutionWorker();
         }
         return ResponseEntity.noContent().build();
     }
 
+    /**
+     * Launches the process of batch creation of orders according to the provided parameters.
+     *
+     * @param params parameters
+     * @return "No Content" http status.
+     * @throws InterruptedException if the thread was interrupted.
+     */
     @PostMapping("/orders/createOrders")
     public ResponseEntity<Object> createOrders(@RequestBody OrdersService.CreateOrdersParams params)
             throws InterruptedException {

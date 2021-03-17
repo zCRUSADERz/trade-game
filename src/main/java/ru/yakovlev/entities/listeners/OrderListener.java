@@ -65,6 +65,12 @@ public class OrderListener {
         }
     }
 
+    /**
+     * Order event listener.
+     *
+     * @author Yakovlev Aleander (sanyakovlev@yandex.ru)
+     * @since 0.3.0
+     */
     @Configurable
     public static class Listener {
         @Autowired
