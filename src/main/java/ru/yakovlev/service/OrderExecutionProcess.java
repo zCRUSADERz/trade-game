@@ -40,7 +40,7 @@ public class OrderExecutionProcess {
                 this.transactionTemplate.executeWithoutResult(status -> {
                     val optExecution = this.orderExecutionRepository.findById(orderExecution.getId());
                     if (optExecution.isPresent()) {
-                        val execution = optExecution.get();
+                        final var execution = optExecution.get();
                         if (execution.getFromOrder().isCancelled() || execution.getToOrder().isCancelled()) {
                             this.cancelExecution(execution);
                         } else {
@@ -93,4 +93,5 @@ public class OrderExecutionProcess {
             this.transferRepository.save(new Transfer(execution, toLeftover));
         }
     }
+
 }
