@@ -5,7 +5,8 @@ COPY mvnw .
 COPY .mvn .mvn
 COPY pom.xml .
 COPY src src
-RUN --mount=type=cache,target=/root/.m2 ./mvnw install
+COPY checkstyle.xml .
+RUN --mount=type=cache,target=/root/.m2 ./mvnw package
 RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
 
 FROM azul/zulu-openjdk-alpine:11-jre
