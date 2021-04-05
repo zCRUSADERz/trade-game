@@ -1,13 +1,12 @@
 package ru.yakovlev.service;
 
 import java.util.concurrent.BlockingQueue;
+import java.util.function.Function;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.transaction.support.TransactionTemplate;
 import ru.yakovlev.entities.Order;
-import ru.yakovlev.repositories.OrderExecutionRepository;
 import ru.yakovlev.repositories.OrderRepository;
 
 /**
@@ -20,9 +19,8 @@ import ru.yakovlev.repositories.OrderRepository;
 @Slf4j
 public class OrdersForExecution {
     private final BlockingQueue<Order> queue;
-    private final TransactionTemplate transactionTemplate;
+    private final Function<Order, OrderForExecution> orderFactory;
     private final OrderRepository orderRepository;
-    private final OrderExecutionRepository orderExecutionRepository;
 
     /**
      * Starts a new thread for order execution.
@@ -34,10 +32,8 @@ public class OrdersForExecution {
             Order order = null;
             try {
                 order = this.queue.take();
-                final var finalOrder = order;
-                this.transactionTemplate.executeWithoutResult(status ->
-                        new OrderForExecution(finalOrder, this.orderRepository, this.orderExecutionRepository)
-                                .sendForExecution());
+                val orderForExecution = this.orderFactory.apply(order);
+                orderForExecution.sendForExecution();
             } catch (InterruptedException ex) {
                 Thread.currentThread().interrupt();
             } catch (Exception ex) {

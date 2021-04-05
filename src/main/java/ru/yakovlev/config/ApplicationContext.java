@@ -28,10 +28,12 @@ import java.util.concurrent.LinkedBlockingQueue;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.transaction.support.TransactionTemplate;
+import org.springframework.context.annotation.Scope;
 import ru.yakovlev.ApplicationEventListener;
+import ru.yakovlev.entities.Order;
 import ru.yakovlev.repositories.OrderExecutionRepository;
 import ru.yakovlev.repositories.OrderRepository;
+import ru.yakovlev.service.OrderForExecution;
 import ru.yakovlev.service.OrdersForExecution;
 
 /**
@@ -51,10 +53,17 @@ public class ApplicationContext {
     }
 
     @Bean
-    OrdersForExecution orderExecutions(TransactionTemplate transactionTemplate, OrderRepository orderRepository,
-                                       OrderExecutionRepository orderExecutionRepository) {
-        return new OrdersForExecution(
-                new LinkedBlockingQueue<>(), transactionTemplate, orderRepository, orderExecutionRepository);
+    @Scope("prototype")
+    OrderForExecution orderForExecution(final Order order, final OrderRepository orderRepository,
+                                        final OrderExecutionRepository orderExecutionRepository) {
+        return new OrderForExecution(order, orderRepository, orderExecutionRepository);
+    }
+
+    @Bean
+    OrdersForExecution orderExecutions(final OrderRepository orderRepository,
+                                       final OrderExecutionRepository orderExecutionRepository) {
+        return new OrdersForExecution(new LinkedBlockingQueue<>(),
+                order -> this.orderForExecution(order, orderRepository, orderExecutionRepository), orderRepository);
     }
 
 }

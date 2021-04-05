@@ -27,6 +27,7 @@ package ru.yakovlev.service;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
+import org.springframework.transaction.annotation.Transactional;
 import ru.yakovlev.entities.Order;
 import ru.yakovlev.entities.OrderExecution;
 import ru.yakovlev.entities.embedded.OrderType;
@@ -49,6 +50,7 @@ public class OrderForExecution {
     /**
      * Send for execution.
      */
+    @Transactional
     public void sendForExecution() {
         if (OrderType.BUY.equals(this.order.getType())) {
             var optOrder = this.orderRepository.findByIdForExecutionWithLock(this.order.getId());
