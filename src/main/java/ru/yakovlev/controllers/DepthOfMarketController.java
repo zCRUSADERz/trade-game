@@ -32,7 +32,7 @@ public class DepthOfMarketController {
      *
      * @return a representation of the resource.
      */
-    @GetMapping("/depthOfMarket")
+    @GetMapping("/depth-of-market")
     public ResponseEntity<RepresentationModel<CollectionModel<PriceLevelInfo>>> depthOfMarket() {
         val builder = HalModelBuilder.halModelOf(new DepthOfMarket(this.orderRepository.depthOfMarket()));
         val self = linkTo(methodOn(DepthOfMarketController.class).depthOfMarket()).withSelfRel();

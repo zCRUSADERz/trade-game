@@ -55,7 +55,7 @@ REST ресурс "order" имеет ограничения по правам ч
         localhost/api/orders/1/cancel
    ``` 
    POST запрос для отмены исполнения ордера с id 1.
-6. ```curl -v -u user2:password -b cookie.txt -c cookie.txt localhost/api/depthOfMarket```
+6. ```curl -v -u user2:password -b cookie.txt -c cookie.txt localhost/api/depth-of-market```
    Возвращает ресурс представляющий биржевой стакан. Записи сгруппированы по цене и типу ордера, 
    для каждого ценового уровня представлена информация о количестве активных ордеров и общем 
    оставшемся объеме по этим ордерам.
@@ -64,7 +64,7 @@ REST ресурс "order" имеет ограничения по правам ч
          -H "Content-Type: application/json" \
          -H "X-XSRF-TOKEN: 4cb5b1e8-1d2e-4cc9-b56f-08ce754030c4" \
          --data '{ "randomType": true,"minPrice": 10,"maxPrice": 100,"maxQuantity": 50,"minQuantity": 1,"numberOfBatches": 50,"batchSize": 100,"delayBetweenBatches": 50}' \
-         localhost/api/orders/createOrders
+         localhost/api/orders/create-orders
    ```
    Пакетное создание ордеров, разрабатывалось для нагрузочного тестирования. Доступ к данной 
    операции имеют пользователи (admin, user1, user2, user3).    
@@ -78,7 +78,7 @@ REST ресурс "order" имеет ограничения по правам ч
 8. ```
    curl -v -X POST -u user2:password -b cookie.txt -c cookie.txt \
         -H "X-XSRF-TOKEN: 4cb5b1e8-1d2e-4cc9-b56f-08ce754030c4" \
-        localhost/api/orders/sendToExecution?limit=100
+        localhost/api/orders/send-to-execution?limit=100
    ```
    Ручная отправка ордеров на исполнение. Отбираются только не исполненные, не отмененные, не 
    находящиеся на исполнении ордера и для которых есть пары. Разрабатывалось с целью 
@@ -87,7 +87,7 @@ REST ресурс "order" имеет ограничения по правам ч
 9. ```
    curl -v -X POST -u user2:password -b cookie.txt -c cookie.txt \
    	    -H "X-XSRF-TOKEN: 4cb5b1e8-1d2e-4cc9-b56f-08ce754030c4" \
-   	    localhost/api/orders/addWorkersForOrderExecution?workers=1
+   	    localhost/api/orders/add-workers-for-order-execution?workers=1
    ```
    Ручной запуск потока для исполнения ордеров. Доступ к данной операции имеют пользователи с 
    ролью "ADMIN". По умолчанию запускается количество потоков исполнения ордеров равное числу ЦПУ. 

@@ -51,7 +51,7 @@ public class OrdersController {
      * @param limit order limit.
      * @return number of orders sent.
      */
-    @PostMapping("/orders/sendToExecution")
+    @PostMapping("/orders/send-to-execution")
     public ResponseEntity<Object> sendToExecution(@RequestParam(defaultValue = "100") int limit) {
         final var sentOrders = this.ordersForExecution.sendToExecution(limit);
         return ResponseEntity.ok(sentOrders);
@@ -63,7 +63,7 @@ public class OrdersController {
      * @param workers number of threads to runю
      * @return "No Content" http status.
      */
-    @PostMapping("/orders/addWorkersForOrderExecution")
+    @PostMapping("/orders/add-workers-for-order-execution")
     public ResponseEntity<Object> addWorkersForOrderExecution(@RequestParam(defaultValue = "1") int workers) {
         for (int i = 0; i < workers; i++) {
             this.ordersForExecution.startExecutionWorker();
@@ -78,7 +78,7 @@ public class OrdersController {
      * @return "No Content" http status.
      * @throws InterruptedException if the thread was interrupted.
      */
-    @PostMapping("/orders/createOrders")
+    @PostMapping("/orders/create-orders")
     public ResponseEntity<Object> createOrders(@RequestBody OrdersService.CreateOrdersParams params)
             throws InterruptedException {
         this.ordersService.createOrders(params);
